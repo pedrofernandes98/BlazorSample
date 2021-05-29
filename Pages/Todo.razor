@@ -1,0 +1,47 @@
+﻿@page "/todo"
+<h3>Lista de Atividades</h3>
+<hr>
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Digite uma tarefa" @bind="newTask">
+    <button @onclick="AddTodoItem" class="btn btn-primary">Adicionar</button>
+</div>
+
+<hr>
+<ul class="list-group">
+    @foreach (var item in listTodo)
+    {
+        <li class="list-group-item d-flex align-items-center">
+            <input type="checkbox" @bind="item.IsDone">
+            @if (item.IsDone)
+            {
+                <span style="margin-left: 25px;"><s>@item.Name</s></span>
+            }
+            else
+            {
+                <span style="margin-left: 25px;">@item.Name</span>
+            }
+
+
+        </li>
+    }
+</ul>
+
+<hr>
+<h5>Atividades Pendentes: @listTodo.Count(item => !item.IsDone)</h5>
+<hr>
+<h5>Atividades Concluídas: @listTodo.Count(item => item.IsDone)</h5>
+
+@code {
+    private List<TodoItem> listTodo = new List<TodoItem>();
+    private string newTask;
+    private bool isDone;
+
+    public void AddTodoItem()
+    {
+        if (!string.IsNullOrWhiteSpace(newTask))
+        {
+            listTodo.Add(new TodoItem { Name = newTask });
+            newTask = string.Empty;
+        }
+    }
+}
